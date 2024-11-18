@@ -26,7 +26,16 @@ To save time in this process, the IT team suggested an ML system that detects in
 
 ## Deployment
 
-### Heroku
+- I linked my GitHub repository to Heroku and chose the manual deployment option to avoid accidentally deploying untested or buggy code.
+
+Older Python Version Issue:
+- My app needed a specific Heroku stack (heroku-20) to support my code.
+
+Using API Key to Log into Heroku via Terminal:
+- I had to authenticate in my terminal using Heroku’s API key because the stack change wasn’t something I could handle directly from the Heroku dashboard.
+
+Changed the Heroku Stack:
+- I updated the stack to heroku-20 to work with the version of Python i was running
 
 ## Main Data Analysis and Machine Learning Libraries
 
@@ -38,7 +47,7 @@ To save time in this process, the IT team suggested an ML system that detects in
 
 
 ### Media
-
+- Heroku
 
 
 ## Acknowledgements 
