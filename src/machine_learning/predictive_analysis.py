@@ -33,7 +33,8 @@ def resize_input_image(img):
     """
     file_path = os.path.join(os.getcwd(), "outputs", "v1", "image_shape.pk1")
     if not os.path.exists(file_path):
-        raise FileNotFoundError(f"{file_path} not found. Ensure the file exists.")
+        raise FileNotFoundError(
+            f"{file_path} not found. Ensure the file exists.")
 
     image_shape = load_pkl_file(file_path=file_path)
     img_resized = img.resize((image_shape[1], image_shape[0]), Image.LANCZOS)
@@ -46,7 +47,7 @@ def load_model_and_predict(my_image):
     """
     Load and perform ML prediction over live images
     """
-    model_path = os.path.join("outputs", "v1", "trained_model.h5")  
+    model_path = os.path.join("outputs", "v1", "trained_model.h5")
     try:
         model = load_model(model_path)
     except Exception as e:
@@ -58,8 +59,14 @@ def load_model_and_predict(my_image):
     target_map = {v: k for k, v in {'Healthy': 0, 'Powdery mildew': 1}.items()}
     pred_class = target_map[pred_proba > 0.5]
     if pred_class == "Powdery mildew":
-        st.write("The predictive analysis indicates the cherry leaf **has powdery mildew**.")
+        st.write(
+            f"The predictive analysis indicates"
+            f" the cherry leaf has **powdery mildew**."
+        )
     else:
-        st.write("The predictive analysis indicates the cherry leaf **is healthy**.")
+        st.write(
+                f"The predictive analysis indicates"
+                f" the cherry leaf is **healthy**."
+            )
 
     return pred_proba, pred_class
