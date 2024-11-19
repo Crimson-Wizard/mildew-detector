@@ -51,13 +51,13 @@ def load_model_and_predict(my_image):
     """
     Load and perform ML prediction over live images
     """
-    # Check TensorFlow version
+    # TensorFlow version check
     st.write(f"TensorFlow version: {tf.__version__}")
 
-    # Construct the full path to the model
-    model_path = os.path.join(os.getcwd(), "outputs", "v1", "trained_model.h5")
+    # Construct model path
+    model_path = os.path.join(os.getcwd(), "outputs", "trained_model.h5")  
 
-    # Debugging: Check the contents of the directory
+    # Check directory contents
     st.write(f"Working directory: {os.getcwd()}")
     try:
         st.write(f"Contents of outputs/v1: {os.listdir('outputs/v1')}")
@@ -65,7 +65,7 @@ def load_model_and_predict(my_image):
         st.error("The directory 'outputs/v1' does not exist in the live environment.")
         return None, None
 
-    # Check if the model file exists
+    # Check if the model path exists
     if not os.path.exists(model_path):
         st.error(f"Model file not found at: {model_path}. Please upload the model file.")
         return None, None
@@ -78,27 +78,19 @@ def load_model_and_predict(my_image):
         st.error(f"Error loading model: {e}")
         return None, None
 
-    # Ensure input image is valid
-    if my_image is None:
-        st.error("No valid input image provided for prediction.")
+    # Validate input image
+    if my_image is None or my_image.shape is None:
+        st.error("Invalid input image. Ensure the image is preprocessed correctly.")
         return None, None
 
     # Perform prediction
     try:
-        pred_proba = model.predict(my_image)[0, 0]  # Get probability for class 1 (Powdery mildew)
+        pred_proba = model.predict(my_image)[0, 0]  # Probability for class 1 (Powdery mildew)
         pred_class = "Powdery mildew" if pred_proba > 0.5 else "Healthy"
 
-        if pred_class == "Powdery mildew":
-            st.write(
-                f"The predictive analysis indicates"
-                f" the cherry leaf has **powdery mildew**."
-            )
-        else:
-            st.write(
-                f"The predictive analysis indicates"
-                f" the cherry leaf is **healthy**."
-            )
-
+        st.write(
+            f"The predictive analysis indicates the cherry leaf is **{pred_class}**."
+        )
         return pred_proba, pred_class
     except Exception as e:
         st.error(f"Error during prediction: {e}")
