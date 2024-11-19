@@ -33,8 +33,8 @@ def resize_input_image(img):
     """
     file_path = os.path.join(os.getcwd(), "outputs", "v1", "image_shape.pk1")
     if not os.path.exists(file_path):
-        raise FileNotFoundError(
-            f"{file_path} not found. Ensure the file exists.")
+        st.error(f"File not found: {file_path}. Ensure the file is uploaded")
+        return None
 
     image_shape = load_pkl_file(file_path=file_path)
     img_resized = img.resize((image_shape[1], image_shape[0]), Image.LANCZOS)
@@ -48,6 +48,9 @@ def load_model_and_predict(my_image):
     Load and perform ML prediction over live images
     """
     model_path = os.path.join("outputs", "v1", "trained_model.h5")
+    if not os.path.exists(model_path):
+        st.error(f"Model file not found: {model_path}. Ensure it is uploaded")
+        return None, None
     try:
         model = load_model(model_path)
     except Exception as e:
