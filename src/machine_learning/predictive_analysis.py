@@ -37,6 +37,9 @@ def resize_input_image(img):
         return None
 
     image_shape = load_pkl_file(file_path=file_path)
+    if not image_shape:
+        st.error("Invalid image shape from file")
+        return None
     img_resized = img.resize((image_shape[1], image_shape[0]), Image.LANCZOS)
     my_image = np.expand_dims(img_resized, axis=0) / 255
 
@@ -47,7 +50,7 @@ def load_model_and_predict(my_image):
     """
     Load and perform ML prediction over live images
     """
-    model_path = os.path.join("outputs", "v1", "trained_model.h5")
+    model_path = os.path.join(os.getcwd(), 'outputs', 'v1', 'trained_model.h5')
     if not os.path.exists(model_path):
         st.error(f"Model file not found: {model_path}. Ensure it is uploaded")
         return None, None
