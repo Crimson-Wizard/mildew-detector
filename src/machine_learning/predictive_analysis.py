@@ -51,13 +51,13 @@ def load_model_and_predict(my_image):
     """
     Load and perform ML prediction over live images
     """
+    # Check TensorFlow version
+    st.write(f"TensorFlow version: {tf.__version__}")
+
     # Construct the full path to the model
     model_path = os.path.join(os.getcwd(), "outputs", "v1", "trained_model.h5")
 
     # Debugging: Check the contents of the directory
-    #check tensorflow version
-    st.write(f"TensorFlow version: {tf.__version__}")
-    
     st.write(f"Working directory: {os.getcwd()}")
     try:
         st.write(f"Contents of outputs/v1: {os.listdir('outputs/v1')}")
@@ -78,10 +78,14 @@ def load_model_and_predict(my_image):
         st.error(f"Error loading model: {e}")
         return None, None
 
+    # Ensure input image is valid
+    if my_image is None:
+        st.error("No valid input image provided for prediction.")
+        return None, None
+
     # Perform prediction
-    # Get probability for class 1 (Powdery mildew)
     try:
-        pred_proba = model.predict(my_image)[0, 0]  
+        pred_proba = model.predict(my_image)[0, 0]  # Get probability for class 1 (Powdery mildew)
         pred_class = "Powdery mildew" if pred_proba > 0.5 else "Healthy"
 
         if pred_class == "Powdery mildew":
