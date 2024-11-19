@@ -1,13 +1,13 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+import tensorflow as tf
 import plotly.express as px
 from tensorflow.keras.models import load_model
 from PIL import Image
 from src.data_management import load_pkl_file
 
-model_path = "outputs/trained_model.h5"
-model = load_model(model_path)
+
 
 def plot_predictions_probabilities(pred_proba, pred_class):
     """
@@ -51,7 +51,7 @@ def load_model_and_predict(my_image):
     Load and perform ML prediction over live images
     """
 
-    model = load_model(f"outputs/trained_model.h5")
+    model = tf.keras.models.load_model('path_to_save/saved_model')
 
     pred_proba = model.predict(my_image)[0, 0]
 
