@@ -14,7 +14,7 @@ def plot_predictions_probabilities(pred_proba, pred_class):
 
     prob_per_class = pd.DataFrame(
         data=[0, 0],
-        index={'Parasitised': 0, 'Uninfected': 1}.keys(),
+        index={'Healthy': 0, 'Powdery Mildew': 1}.keys(),
         columns=['Probability']
     )
     prob_per_class.loc[pred_class] = pred_proba
@@ -49,17 +49,20 @@ def load_model_and_predict(my_image):
     Load and perform ML prediction over live images
     """
 
-    model = load_model(f"outputs/v1/trained_model.h5")
+    model = load_model(f"outputs/trained_model.h5")
 
     pred_proba = model.predict(my_image)[0, 0]
 
-    target_map = {v: k for k, v in {'Parasitised': 0, 'Uninfected': 1}.items()}
+    target_map = {v: k for k, v in {'Healthy': 0, 'Powdery Mildew': 1}.items()}
     pred_class = target_map[pred_proba > 0.5]
-    if pred_class == target_map[0]:
+    if pred_class == 'Healthy':
         pred_proba = 1 - pred_proba
+        
+    leaf_condition = 'has powdery mildew' if pred_class.lower() == 'powdery mildew' else 'is healthy'
 
     st.write(
-        f"The predictive analysis indicates the sample leaf is "
-        f"**{pred_class.lower()}**.")
+        f"The predictive analysis indicates the sample leaf"
+        f" **{leaf_condition}**.")
 
     return pred_proba, pred_class
+    
