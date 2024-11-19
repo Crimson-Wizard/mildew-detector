@@ -42,7 +42,7 @@ def resize_input_image(img):
         return None
     img_resized = img.resize((image_shape[1], image_shape[0]), Image.LANCZOS)
     my_image = np.expand_dims(img_resized, axis=0) / 255
-
+    
     return my_image
 
 
@@ -74,5 +74,5 @@ def load_model_and_predict(my_image):
                 f"The predictive analysis indicates"
                 f" the cherry leaf is **healthy**."
             )
-
+    st.write(f"Contents of outputs/v1: {os.listdir('outputs/v1')}")
     return pred_proba, pred_class
