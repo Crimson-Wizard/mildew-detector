@@ -1,9 +1,7 @@
-import os
 import streamlit as st
 import numpy as np
 import pandas as pd
 import plotly.express as px
-import tensorflow as tf
 from tensorflow.keras.models import load_model
 from PIL import Image
 from src.data_management import load_pkl_file
@@ -13,18 +11,25 @@ def plot_predictions_probabilities(pred_proba, pred_class):
     """
     Plot prediction probability results
     """
-    prob_per_class = pd.DataFrame({
-        'Diagnostic': ['Healthy', 'Powdery Mildew'],
-        'Probability': [1 - pred_proba, pred_proba]
-    })
+
+    prob_per_class = pd.DataFrame(
+        data=[0, 0],
+        index={'Parasitised': 0, 'Uninfected': 1}.keys(),
+        columns=['Probability']
+    )
+    prob_per_class.loc[pred_class] = pred_proba
+    for x in prob_per_class.index.to_list():
+        if x not in pred_class:
+            prob_per_class.loc[x] = 1 - pred_proba
+    prob_per_class = prob_per_class.round(3)
+    prob_per_class['Diagnostic'] = prob_per_class.index
 
     fig = px.bar(
         prob_per_class,
         x='Diagnostic',
-        y='Probability',
+        y=prob_per_class['Probability'],
         range_y=[0, 1],
-        width=600, height=300, template='seaborn'
-    )
+        width=600, height=300, template='seaborn')
     st.plotly_chart(fig)
 
 
@@ -32,18 +37,10 @@ def resize_input_image(img):
     """
     Reshape image to average image size
     """
-    file_path = os.path.join(os.getcwd(), "outputs", "v1", "image_shape.pk1")
-    if not os.path.exists(file_path):
-        st.error(f"File not found: {file_path}. Ensure the file is uploaded")
-        return None
-
-    image_shape = load_pkl_file(file_path=file_path)
-    if not image_shape:
-        st.error("Invalid image shape from file")
-        return None
+    image_shape = load_pkl_file(file_path=f"/workspace/mildew-detector/outputs/v1/image_shape.pk1")
     img_resized = img.resize((image_shape[1], image_shape[0]), Image.LANCZOS)
-    my_image = np.expand_dims(img_resized, axis=0) / 255
-    
+    my_image = np.expand_dims(img_resized, axis=0)/255
+
     return my_image
 
 
@@ -51,47 +48,18 @@ def load_model_and_predict(my_image):
     """
     Load and perform ML prediction over live images
     """
-    # TensorFlow version check
-    st.write(f"TensorFlow version: {tf.__version__}")
 
-    # Construct model path
-    model_path = os.path.join(os.getcwd(), "outputs", "trained_model.h5")  
+    model = load_model(f"outputs/v1/trained_model.h5")
 
-    # Check directory contents
-    st.write(f"Working directory: {os.getcwd()}")
-    try:
-        st.write(f"Contents of outputs/v1: {os.listdir('outputs/v1')}")
-    except FileNotFoundError:
-        st.error("The directory 'outputs/v1' does not exist in the live environment.")
-        return None, None
+    pred_proba = model.predict(my_image)[0, 0]
 
-    # Check if the model path exists
-    if not os.path.exists(model_path):
-        st.error(f"Model file not found at: {model_path}. Please upload the model file.")
-        return None, None
+    target_map = {v: k for k, v in {'Parasitised': 0, 'Uninfected': 1}.items()}
+    pred_class = target_map[pred_proba > 0.5]
+    if pred_class == target_map[0]:
+        pred_proba = 1 - pred_proba
 
-    # Attempt to load the model
-    try:
-        model = load_model(model_path)
-        st.success("Model loaded successfully.")
-    except Exception as e:
-        st.error(f"Error loading model: {e}")
-        return None, None
+    st.write(
+        f"The predictive analysis indicates the sample leaf is "
+        f"**{pred_class.lower()}** with malaria.")
 
-    # Validate input image
-    if my_image is None or my_image.shape is None:
-        st.error("Invalid input image. Ensure the image is preprocessed correctly.")
-        return None, None
-
-    # Perform prediction
-    try:
-        pred_proba = model.predict(my_image)[0, 0]  # Probability for class 1 (Powdery mildew)
-        pred_class = "Powdery mildew" if pred_proba > 0.5 else "Healthy"
-
-        st.write(
-            f"The predictive analysis indicates the cherry leaf is **{pred_class}**."
-        )
-        return pred_proba, pred_class
-    except Exception as e:
-        st.error(f"Error during prediction: {e}")
-        return None, None
+    return pred_proba, pred_class
