@@ -50,8 +50,8 @@ def load_model_and_predict(my_image):
     """
     Load and perform ML prediction over live images
     """
-    model = load_model("outputs/v2/trained_model.h5")
-    #model = tf.keras.models.load_model('path_to_save/saved_model')
+    #model = load_model("path_to_save/saved_model")
+    model = tf.keras.models.load_model('path_to_save/saved_model')
 
     pred_proba = model.predict(my_image)[0, 0]
 
