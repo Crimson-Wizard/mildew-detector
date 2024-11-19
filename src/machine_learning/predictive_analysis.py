@@ -50,29 +50,48 @@ def load_model_and_predict(my_image):
     """
     Load and perform ML prediction over live images
     """
-    model_path = os.path.join(os.getcwd(), 'outputs', 'v1', 'trained_model.h5')
-    if not os.path.exists(model_path):
-        st.error(f"Model file not found: {model_path}. Ensure it is uploaded")
+    # Construct the full path to the model
+    model_path = os.path.join(os.getcwd(), "outputs", "v1", "trained_model.h5")
+
+    # Debugging: Check the contents of the directory
+    st.write(f"Working directory: {os.getcwd()}")
+    try:
+        st.write(f"Contents of outputs/v1: {os.listdir('outputs/v1')}")
+    except FileNotFoundError:
+        st.error("The directory 'outputs/v1' does not exist in the live environment.")
         return None, None
+
+    # Check if the model file exists
+    if not os.path.exists(model_path):
+        st.error(f"Model file not found at: {model_path}. Please upload the model file.")
+        return None, None
+
+    # Attempt to load the model
     try:
         model = load_model(model_path)
+        st.success("Model loaded successfully.")
     except Exception as e:
         st.error(f"Error loading model: {e}")
         return None, None
 
-    pred_proba = model.predict(my_image)[0, 0]
+    # Perform prediction
+    # Get probability for class 1 (Powdery mildew)
+    try:
+        pred_proba = model.predict(my_image)[0, 0]  
+        pred_class = "Powdery mildew" if pred_proba > 0.5 else "Healthy"
 
-    target_map = {v: k for k, v in {'Healthy': 0, 'Powdery mildew': 1}.items()}
-    pred_class = target_map[pred_proba > 0.5]
-    if pred_class == "Powdery mildew":
-        st.write(
-            f"The predictive analysis indicates"
-            f" the cherry leaf has **powdery mildew**."
-        )
-    else:
-        st.write(
+        if pred_class == "Powdery mildew":
+            st.write(
+                f"The predictive analysis indicates"
+                f" the cherry leaf has **powdery mildew**."
+            )
+        else:
+            st.write(
                 f"The predictive analysis indicates"
                 f" the cherry leaf is **healthy**."
             )
-    st.write(f"Contents of outputs/v1: {os.listdir('outputs/v1')}")
-    return pred_proba, pred_class
+
+        return pred_proba, pred_class
+    except Exception as e:
+        st.error(f"Error during prediction: {e}")
+        return None, None
