@@ -5,3 +5,5 @@ inputs/cherry_leaves_dataset/cherry-leaves/test
 inputs/cherry_leaves_dataset/cherry-leaves/train
 app_pages/__pycache__
 README.md
+outputs/v1/trained_model.h5
+outputs/trained_model.h5
