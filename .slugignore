@@ -1,0 +1,7 @@
+jupyter_notebooks
+.gitpod.yml
+.gitpod.dockerfile
+inputs/cherry_leaves_dataset/cherry-leaves/test
+inputs/cherry_leaves_dataset/cherry-leaves/train
+app_pages/__pycache__
+README.md
