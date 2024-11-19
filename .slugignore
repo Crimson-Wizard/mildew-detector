@@ -10,3 +10,4 @@ outputs/trained_model.h5
 outputs/v1/trained_model.h5
 .vscode
 inputs/cherry_leaves_dataset/cherry-leaves/validation
+outputs/v1

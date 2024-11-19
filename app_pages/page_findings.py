@@ -16,8 +16,8 @@ def page_findings_body():
 
     # checkbox for average and variability of leaf pattern
     if st.checkbox("Difference between average and variability image"):
-        avg_healthy = plt.imread(f"outputs/v1/avg_var_healthy.png")
-        avg_powdery = plt.imread(f"outputs/v1/avg_var_powdery_mildew.png")
+        avg_healthy = plt.imread(f"outputs/v2/avg_var_healthy.png")
+        avg_powdery = plt.imread(f"outputs/v2/avg_var_powdery_mildew.png")
         st.warning(
             f"We notice a small colour pigment difference in when"
             f" comparing the average and variability images")
