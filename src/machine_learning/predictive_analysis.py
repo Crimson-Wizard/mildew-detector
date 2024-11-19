@@ -37,7 +37,7 @@ def resize_input_image(img):
     """
     Reshape image to average image size
     """
-    image_shape = load_pkl_file(file_path=f"/workspace/mildew-detector/outputs/v1/image_shape.pk1")
+    image_shape = load_pkl_file(file_path=f"outputs/v1/image_shape.pk1")
     img_resized = img.resize((image_shape[1], image_shape[0]), Image.LANCZOS)
     my_image = np.expand_dims(img_resized, axis=0)/255
 
@@ -60,6 +60,6 @@ def load_model_and_predict(my_image):
 
     st.write(
         f"The predictive analysis indicates the sample leaf is "
-        f"**{pred_class.lower()}** with malaria.")
+        f"**{pred_class.lower()}**.")
 
     return pred_proba, pred_class
