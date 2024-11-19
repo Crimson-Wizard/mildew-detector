@@ -6,6 +6,8 @@ from tensorflow.keras.models import load_model
 from PIL import Image
 from src.data_management import load_pkl_file
 
+model_path = "outputs/trained_model.h5"
+model = load_model(model_path)
 
 def plot_predictions_probabilities(pred_proba, pred_class):
     """

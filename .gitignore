@@ -10,3 +10,4 @@ cloudinary_python.txt
 kaggle.json
 inputs/cherry_leaves_dataset/cherry-leaves/test
 inputs/cherry_leaves_dataset/cherry-leaves/train
+/workspace/mildew-detector/outputs/v1/trained_model_saved
