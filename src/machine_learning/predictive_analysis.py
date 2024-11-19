@@ -3,6 +3,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import tensorflow as tf
 from tensorflow.keras.models import load_model
 from PIL import Image
 from src.data_management import load_pkl_file
@@ -54,6 +55,9 @@ def load_model_and_predict(my_image):
     model_path = os.path.join(os.getcwd(), "outputs", "v1", "trained_model.h5")
 
     # Debugging: Check the contents of the directory
+    #check tensorflow version
+    st.write(f"TensorFlow version: {tf.__version__}")
+    
     st.write(f"Working directory: {os.getcwd()}")
     try:
         st.write(f"Contents of outputs/v1: {os.listdir('outputs/v1')}")
