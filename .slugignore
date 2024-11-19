@@ -7,4 +7,6 @@ app_pages/__pycache__
 README.md
 outputs/v1/trained_model.h5
 outputs/trained_model.h5
-/workspace/mildew-detector/outputs/v1/trained_model_saved
+outputs/v1/trained_model.h5
+.vscode
+inputs/cherry_leaves_dataset/cherry-leaves/validation
