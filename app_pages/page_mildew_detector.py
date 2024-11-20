@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 import pandas as pd
+
 from src.data_management import download_dataframe_as_csv
 from src.machine_learning.predictive_analysis import (
     load_model_and_predict,
@@ -30,38 +31,23 @@ def page_mildew_detector_body():
             'png', 'jpg', 'jpeg'], accept_multiple_files=True)
 
     if images_buffer is not None:
-        report_data = []
-        version = "v1"
+            df_report = pd.DataFrame([])
+            for image in images_buffer:
 
-        for image in images_buffer:
-            try:
-                # Validate and process each uploaded file
-                img_pil = Image.open(image)
-                img_pil.verify()
-                img_pil = Image.open(image)  # Reopen after verify()
-
+                img_pil = (Image.open(image))
+                st.info(f"Cherry Leaf sample **{image.name}**")
                 img_array = np.array(img_pil)
-                st.info(f"Cherry leaf sample: **{image.name}**")
-                st.image(
-                    img_pil,
-                    caption=(f"Image Size: {img_array.shape[1]}px width x {img_array.shape[0]}px height")
-                )
+                st.image(img_pil, caption=f"Image Size: {img_array.shape[1]}px width x {img_array.shape[0]}px height")
 
-                # Resize and predict
+                
                 resized_img = resize_input_image(img=img_pil)
                 pred_proba, pred_class = load_model_and_predict(resized_img)
                 plot_predictions_probabilities(pred_proba, pred_class)
 
-                report_data.append({"Name": image.name, 'Result': pred_class})
-
-            except (IOError, SyntaxError) as e:
-                st.error(f"File {image.name} is not a valid image: {e}")
-            except Exception as e:
-                st.error(f"Error processing {image.name}: {e}")
-
-    # Create and display the report
-    df_report = pd.DataFrame(report_data)
-    if not df_report.empty:
-        st.success("Analysis Report")
-        st.table(df_report)
-        st.markdown(download_dataframe_as_csv(df_report), unsafe_allow_html=True)
+                df_report = df_report.append({"Name":image.name, 'Result': pred_class },
+                                            ignore_index=True)
+            
+            if not df_report.empty:
+                st.success("Analysis Report")
+                st.table(df_report)
+                st.markdown(download_dataframe_as_csv(df_report), unsafe_allow_html=True)
