@@ -38,9 +38,9 @@ def resize_input_image(img):
     Reshape image to average image size
     """
     try:
-        image_shape = (256, 256)
+        image_shape = load_pkl_file(file_path=f"outputs/v2/image_shape.pk1")
         #resize image
-        img_resized = img.resize(image_shape, Image.LANCZOS)
+        img_resized = img.resize((image_shape[1], image_shape[0]), Image.LANCZOS)
         my_image = np.expand_dims(img_resized, axis=0)/255
 
         return my_image
