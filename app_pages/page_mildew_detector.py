@@ -40,7 +40,7 @@ def page_mildew_detector_body():
                 st.image(img_pil, caption=f"Image Size: {img_array.shape[1]}px width x {img_array.shape[0]}px height")
 
                 version = 'v2'
-                resized_img = resize_input_image(img=img_pil, version=version)
+                resized_img = resize_input_image(img=img_pil)
                 pred_proba, pred_class = load_model_and_predict(resized_img)
                 plot_predictions_probabilities(pred_proba, pred_class)
 
