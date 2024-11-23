@@ -51,7 +51,7 @@ def resize_input_image(img,version):
 
 def load_model_and_predict(my_image,):
     try:
-        # Log the model path
+        # Log the model path 
         model_path = f"path_to_save/saved_model"
         st.write(f"Loading model from: {model_path}")
 
