@@ -53,6 +53,13 @@ def load_model_and_predict(my_image):
     Load and perform ML prediction over live images
     """
     try:
+        #debuging
+        #tensoreflow version
+        st.write(f"TensorFlow version: {tf.__version__}")
+        #do image shapes match 
+        st.write(f"Model expected input shape: {model.input_shape}")
+        st.write(f"Resized image shape: {my_image.shape}")
+        
         model = load_model('path_to_save/saved_model')
 
         pred_proba = model.predict(my_image)[0, 0]
