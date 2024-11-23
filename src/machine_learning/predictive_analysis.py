@@ -49,37 +49,36 @@ def resize_input_image(img,version):
         raise ValueError(f"Error resizing image: {e}")
 
 
-def load_model_and_predict(my_image, version):
-    """
-    Load and perform ML prediction over live images
-    """
+def load_model_and_predict(my_image,):
     try:
-        #debuging
-        #tensoreflow version
-        st.write(f"TensorFlow version: {tf.__version__}")
-        
-        model = load_model("path_to_save/saved_model")
+        # Log the model path
+        model_path = f"path_to_save/saved_model"
+        st.write(f"Loading model from: {model_path}")
 
+        # Load the model
+        model = load_model(model_path)
+        st.write("Model loaded successfully.")
+
+        # Check the model's input shape
+        st.write(f"Model expected input shape: {model.input_shape}")
+        st.write(f"Input image shape: {my_image.shape}")
+
+        # Perform prediction
         pred_proba = model.predict(my_image)[0, 0]
+        st.write(f"Prediction probability: {pred_proba}")
 
+        # Map prediction to class
         target_map = {v: k for k, v in {'Healthy': 0, 'Powdery Mildew': 1}.items()}
         pred_class = target_map[pred_proba > 0.5]
         if pred_class == 'Healthy':
             pred_proba = 1 - pred_proba
-            
-        leaf_condition = 'has powdery mildew' if pred_class.lower() == 'powdery mildew' else 'is healthy'
 
-        st.write(
-            f"The predictive analysis indicates the sample leaf"
-            f" **{leaf_condition}**.")
-        
-            #do image shapes match 
-        st.write(f"Model expected input shape: {model.input_shape}")
-        st.write(f"Resized image shape: {my_image.shape}")
+        leaf_condition = 'has powdery mildew' if pred_class.lower() == 'powdery mildew' else 'is healthy'
+        st.write(f"The leaf condition is: {leaf_condition}")
 
         return pred_proba, pred_class
-    except Exception as e:
-        raise RuntimeError(f"Error during prediction: {e}")
-    
 
+    except Exception as e:
+        st.error(f"Error during prediction: {e}")
+        raise RuntimeError(f"Error during prediction: {e}")
     
