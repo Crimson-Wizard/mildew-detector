@@ -37,7 +37,7 @@ def plot_predictions_probabilities(pred_proba, pred_class):
 
 def resize_input_image(img):
     try:
-        image_shape = load_pkl_file(file_path=f"outputs/v2/image_shape.pk1")
+        image_shape = load_pkl_file(file_path=f"outputs/v3/image_shape.pk1")
         st.write(f"Loaded image shape: {image_shape}")
         img_resized = img.resize((image_shape[1], image_shape[0]), Image.LANCZOS)
         img_array = np.array(img_resized) / 255.0  # Normalize to [0, 1]
@@ -46,30 +46,14 @@ def resize_input_image(img):
         raise ValueError(f"Error resizing image: {e}")
 
 def load_model_and_predict(my_image,):
-    st.write(f"Preprocessed image shape: {my_image.shape}")
-    try:
-        # Log the model path 
-        model_path = "path_to_save/saved_model"
-        if not os.path.exists(model_path):
-            raise FileNotFoundError(f"Model directory does not exist: {model_path}")
-
-        required_files = ["saved_model.pb", "variables/variables.index", "variables/variables.data-00000-of-00001"]
-        for file in required_files:
-            if not os.path.exists(os.path.join(model_path, file)):
-                raise FileNotFoundError(f"Missing file in model directory: {file}")
-            
+    
         # Load the model
-        model = load_model(model_path)
+        model = load_model("outputs/v3/trained_model_flexible.h5")
         st.write("Model loaded successfully.")
-
-        # Check the model's input shape
-        st.write(f"Model expected input shape: {model.input_shape}")
         st.write(f"Input image shape: {my_image.shape}")
 
         # Perform prediction
         pred_proba = model.predict(my_image)[0, 0]
-        st.write(f"Prediction probability: {pred_proba}")
-
         # Map prediction to class
         target_map = {v: k for k, v in {'Healthy': 0, 'Powdery Mildew': 1}.items()}
         pred_class = target_map[pred_proba > 0.5]
@@ -77,10 +61,6 @@ def load_model_and_predict(my_image,):
             pred_proba = 1 - pred_proba
 
         leaf_condition = 'has powdery mildew' if pred_class.lower() == 'powdery mildew' else 'is healthy'
-        st.write(f"The leaf condition is: {leaf_condition}")
+        st.success(f"The leaf condition is: {leaf_condition}")
 
         return pred_proba, pred_class
-
-    except Exception as e:
-        st.error(f"Error during prediction: {e}")
-        raise RuntimeError(f"Error during prediction: {e}")

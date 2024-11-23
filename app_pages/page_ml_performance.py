@@ -8,7 +8,7 @@ import os
 
 def page_ml_performance_body():
     st.write("### Train, Validation and Test Set: Labels Frequencies")
-    labels_distribution_path = "outputs/v2/labels_distribution.png"
+    labels_distribution_path = "outputs/v3/labels_distribution.png"
     if os.path.exists(labels_distribution_path):
         labels_distribution = imread(labels_distribution_path)
         st.image(
@@ -21,14 +21,14 @@ def page_ml_performance_body():
     st.write("### Model History")
     col1, col2 = st.beta_columns(2)
     with col1:
-        model_acc_path = "outputs/v2/model_training_accuracy.png"
+        model_acc_path = "outputs/v3/model_training_accuracy.png"
         if os.path.exists(model_acc_path):
             model_acc = imread(model_acc_path)
             st.image(model_acc, caption='Model Training Accuracy')
         else:
             st.error(f"File not found: {model_acc_path}")
     with col2:
-        model_loss_path = "outputs/v2/model_training_losses.png"
+        model_loss_path = "outputs/v3/model_training_losses.png"
         if os.path.exists(model_loss_path):
             model_loss = imread(model_loss_path)
             st.image(model_loss, caption='Model Training Losses')
