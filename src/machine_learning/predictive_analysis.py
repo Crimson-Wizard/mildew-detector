@@ -46,14 +46,18 @@ def resize_input_image(img):
         raise ValueError(f"Error resizing image: {e}")
 
 def load_model_and_predict(my_image,):
-    
-        # Load the model
-        model = load_model("outputs/v3/trained_model_flexible.h5")
-        st.write("Model loaded successfully.")
-        st.write(f"Input image shape: {my_image.shape}")
+        # Explicitly specify the path to the .h5 file
+        model_path = 'outputs/v3/trained_model_flexible.h5'
+
+        # Load the .h5 model
+        try:
+            new_model = load_model(model_path)
+            print("Model loaded successfully!")
+        except OSError as e:
+            print(f"Error loading model: {e}")
 
         # Perform prediction
-        pred_proba = model.predict(my_image)[0, 0]
+        pred_proba = new_model.predict(my_image)[0, 0]
         # Map prediction to class
         target_map = {v: k for k, v in {'Healthy': 0, 'Powdery Mildew': 1}.items()}
         pred_class = target_map[pred_proba > 0.5]
