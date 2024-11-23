@@ -1,5 +1,6 @@
 import streamlit as st
 import numpy as np
+import os
 import tensorflow as tf
 import pandas as pd
 import plotly.express as px
@@ -49,9 +50,15 @@ def load_model_and_predict(my_image,):
     st.write(f"Preprocessed image shape: {my_image.shape}")
     try:
         # Log the model path 
-        model_path = f"path_to_save/saved_model"
-        st.write(f"Loading model from: {model_path}")
+        model_path = "path_to_save/saved_model"
+        if not os.path.exists(model_path):
+            raise FileNotFoundError(f"Model directory does not exist: {model_path}")
 
+        required_files = ["saved_model.pb", "variables/variables.index", "variables/variables.data-00000-of-00001"]
+        for file in required_files:
+            if not os.path.exists(os.path.join(model_path, file)):
+                raise FileNotFoundError(f"Missing file in model directory: {file}")
+            
         # Load the model
         model = load_model(model_path)
         st.write("Model loaded successfully.")
