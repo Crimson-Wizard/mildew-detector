@@ -58,7 +58,7 @@ def load_model_and_predict(my_image):
         #tensoreflow version
         st.write(f"TensorFlow version: {tf.__version__}")
         
-        model = load_model('path_to_save/saved_model/variables')
+        model = load_model('path_to_save/saved_model')
 
         pred_proba = model.predict(my_image)[0, 0]
 
