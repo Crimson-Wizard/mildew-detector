@@ -57,9 +57,6 @@ def load_model_and_predict(my_image):
         #debuging
         #tensoreflow version
         st.write(f"TensorFlow version: {tf.__version__}")
-        #do image shapes match 
-        st.write(f"Model expected input shape: {model.input_shape}")
-        st.write(f"Resized image shape: {my_image.shape}")
         
         model = load_model('path_to_save/saved_model')
 
@@ -75,8 +72,14 @@ def load_model_and_predict(my_image):
         st.write(
             f"The predictive analysis indicates the sample leaf"
             f" **{leaf_condition}**.")
+        
+            #do image shapes match 
+        st.write(f"Model expected input shape: {model.input_shape}")
+        st.write(f"Resized image shape: {my_image.shape}")
 
         return pred_proba, pred_class
     except Exception as e:
         raise RuntimeError(f"Error during prediction: {e}")
+    
+
     
