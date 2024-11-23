@@ -34,22 +34,19 @@ def plot_predictions_probabilities(pred_proba, pred_class):
     st.plotly_chart(fig)
 
 
-def resize_input_image(img,version):
-    """
-    Reshape image to average image size
-    """
+def resize_input_image(img):
     try:
-        image_shape = load_pkl_file(file_path=f"outputs/{version}/image_shape.pk1")
-        #resize image
+        image_shape = load_pkl_file(file_path=f"outputs/v2/image_shape.pk1")
         img_resized = img.resize((image_shape[1], image_shape[0]), Image.LANCZOS)
-        my_image = np.expand_dims(img_resized, axis=0)/255
-
-        return my_image
+        img_array = np.array(img_resized) / 255.0  # Normalize to [0, 1]
+        return np.expand_dims(img_array, axis=0)  # Add batch dimension
     except Exception as e:
         raise ValueError(f"Error resizing image: {e}")
 
 
+
 def load_model_and_predict(my_image,):
+    st.write(f"Preprocessed image shape: {my_image.shape}")
     try:
         # Log the model path 
         model_path = f"path_to_save/saved_model"
@@ -81,4 +78,3 @@ def load_model_and_predict(my_image,):
     except Exception as e:
         st.error(f"Error during prediction: {e}")
         raise RuntimeError(f"Error during prediction: {e}")
-    
