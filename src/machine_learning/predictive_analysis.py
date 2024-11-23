@@ -38,13 +38,17 @@ def plot_predictions_probabilities(pred_proba, pred_class):
 def resize_input_image(img):
     try:
         image_shape = load_pkl_file(file_path=f"outputs/v2/image_shape.pk1")
+        st.write(f"Loaded image shape: {image_shape}")
         img_resized = img.resize((image_shape[1], image_shape[0]), Image.LANCZOS)
         img_array = np.array(img_resized) / 255.0  # Normalize to [0, 1]
         return np.expand_dims(img_array, axis=0)  # Add batch dimension
     except Exception as e:
         raise ValueError(f"Error resizing image: {e}")
 
-
+@st.cache_resource
+def load_model_once():
+    model_path = "path_to_save/saved_model"
+    return load_model(model_path)
 
 def load_model_and_predict(my_image,):
     st.write(f"Preprocessed image shape: {my_image.shape}")

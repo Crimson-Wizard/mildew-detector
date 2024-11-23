@@ -30,24 +30,18 @@ def page_mildew_detector_body():
         'Upload cherry leaf samples. You may select more than one.', type=[
             'png', 'jpg', 'jpeg'], accept_multiple_files=True)
 
-    if images_buffer is not None:
-            df_report = pd.DataFrame([])
-            for image in images_buffer:
+    results = []
+    for image in images_buffer:
+        img_pil = (Image.open(image))
+        st.info(f"Cherry Leaf sample **{image.name}**")
+        img_array = np.array(img_pil)
+        st.image(img_pil, caption=f"Image Size: {img_array.shape[1]}px width x {img_array.shape[0]}px height")
 
-                img_pil = (Image.open(image))
-                st.info(f"Cherry Leaf sample **{image.name}**")
-                img_array = np.array(img_pil)
-                st.image(img_pil, caption=f"Image Size: {img_array.shape[1]}px width x {img_array.shape[0]}px height")
+        resized_img = resize_input_image(img=img_pil)
+        pred_proba, pred_class = load_model_and_predict(resized_img)
+        plot_predictions_probabilities(pred_proba, pred_class)
 
-                version = 'v2'
-                resized_img = resize_input_image(img=img_pil)
-                pred_proba, pred_class = load_model_and_predict(resized_img)
-                plot_predictions_probabilities(pred_proba, pred_class)
+        results.append({"Name": image.name, "Result": pred_class})
 
-                df_report = df_report.append({"Name":image.name, 'Result': pred_class },
-                                            ignore_index=True)
-            
-            if not df_report.empty:
-                st.success("Analysis Report")
-                st.table(df_report)
-                st.markdown(download_dataframe_as_csv(df_report), unsafe_allow_html=True)
+    # Convert results to DataFrame
+    df_report = pd.DataFrame(results)
