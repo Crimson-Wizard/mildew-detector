@@ -45,11 +45,6 @@ def resize_input_image(img):
     except Exception as e:
         raise ValueError(f"Error resizing image: {e}")
 
-@st.cache_resource
-def load_model_once():
-    model_path = "path_to_save/saved_model"
-    return load_model(model_path)
-
 def load_model_and_predict(my_image,):
     st.write(f"Preprocessed image shape: {my_image.shape}")
     try:
