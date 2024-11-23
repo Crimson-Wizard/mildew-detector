@@ -1,1 +1,5 @@
 jupyter_notebooks
+outputs/v1
+jupyter_notebooks
+inputs/cherry_leaves_dataset/cherry-leaves/test
+inputs/cherry_leaves_dataset/cherry-leaves/train
