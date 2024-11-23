@@ -34,12 +34,12 @@ def plot_predictions_probabilities(pred_proba, pred_class):
     st.plotly_chart(fig)
 
 
-def resize_input_image(img):
+def resize_input_image(img,version):
     """
     Reshape image to average image size
     """
     try:
-        image_shape = load_pkl_file(file_path=f"outputs/v2/image_shape.pk1")
+        image_shape = load_pkl_file(file_path=f"outputs/{version}/image_shape.pk1")
         #resize image
         img_resized = img.resize((image_shape[1], image_shape[0]), Image.LANCZOS)
         my_image = np.expand_dims(img_resized, axis=0)/255
@@ -49,7 +49,7 @@ def resize_input_image(img):
         raise ValueError(f"Error resizing image: {e}")
 
 
-def load_model_and_predict(my_image):
+def load_model_and_predict(my_image, version):
     """
     Load and perform ML prediction over live images
     """
@@ -58,7 +58,7 @@ def load_model_and_predict(my_image):
         #tensoreflow version
         st.write(f"TensorFlow version: {tf.__version__}")
         
-        model = load_model('path_to_save/saved_model')
+        model = load_model(f"outputs/{version}/trained_model.h5")
 
         pred_proba = model.predict(my_image)[0, 0]
 
