@@ -8,7 +8,7 @@ from matplotlib.image import imread
 import itertools
 import random
 
-
+# page for project findings
 def page_findings_body():
     st.write("### Mildew Visualizer")
     st.info(

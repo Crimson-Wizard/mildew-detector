@@ -1,7 +1,7 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 
-
+# function to display project summary
 def page_project_summary_body():
 
     st.header("Project Summary")

@@ -6,6 +6,8 @@ from src.machine_learning.evaluate_clf import load_test_evaluation
 import os
 
 
+# Function to display the performance metrics 
+# of a machine learning model in a Streamlit app
 def page_ml_performance_body():
     st.write("### Train, Validation and Test Set: Labels Frequencies")
     labels_distribution_path = "outputs/v4/labels_distribution.png"
