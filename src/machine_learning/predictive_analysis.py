@@ -34,7 +34,7 @@ def resize_input_image(img):
     """
     try:
         # Load expected image shape
-        image_shape = load_pkl_file(file_path="outputs/v3/image_shape.pk1")
+        image_shape = load_pkl_file(file_path="outputs/v4/image_shape.pk1")
         st.write(f"Loaded image shape: {image_shape}")
 
         # Resize image and normalize
@@ -54,14 +54,14 @@ def load_model_and_predict(my_image):
     Load the model and perform predictions on the input image.
     """
     # Path to the model
-    model_path = 'outputs/v3/trained_model_flexible.h5'
+    model_path = 'outputs/trained_model.h5'
 
     # Load the model
     try:
         new_model = load_model(model_path)
         st.success("Model loaded successfully!")
     except OSError:
-        st.error(f"Model file not found at: {model_path}. Please upload the file to `outputs/v3`.")
+        st.error(f"Model file not found at: {model_path}. Please upload the file to `outputs/v4`.")
         raise
     except Exception as e:
         st.error(f"Error loading model: {e}")
