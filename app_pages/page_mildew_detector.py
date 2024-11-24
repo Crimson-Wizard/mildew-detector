@@ -11,12 +11,12 @@ from src.machine_learning.predictive_analysis import (
 )
 
 
-def page_mildew_detector_body():    
+def page_mildew_detector_body():
     """
     Page for detecting mildew in cherry leaf samples.
     This function defines the main interface for the mildew detector.
     """
-    
+
     st.info(
         "The client is interested in predicting if a cherry "
         "tree is healthy or contains powdery mildew."
