@@ -1,3 +1,14 @@
+core.Microsoft*
+core.mongo*
+core.python*
+__pycache__/
+*.py[cod]
+.github/
+kaggle.json
 /workspace/mildew-detector/outputs/v1/trained_model_saved
 outputs/v1/trained_model.h5
-
+outputs/v1/trained_model.h5
+outputs/v2/trained_model.h5
+outputs/v3/trained_model.h5
+inputs/cherry_leaves_dataset/cherry-leaves/test
+inputs/cherry_leaves_dataset/cherry-leaves/train

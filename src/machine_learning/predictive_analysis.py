@@ -35,8 +35,7 @@ def resize_input_image(img):
     try:
         # Load expected image shape
         image_shape = load_pkl_file(file_path="outputs/v4/image_shape.pk1")
-        st.write(f"Loaded image shape: {image_shape}")
-
+        
         # Resize image and normalize
         img_resized = img.resize((image_shape[1], image_shape[0]), Image.LANCZOS)
         img_array = np.array(img_resized) / 255.0  # Normalize to [0, 1]
@@ -48,7 +47,6 @@ def resize_input_image(img):
         st.error(f"Error resizing image: {e}")
         raise
 
-
 def load_model_and_predict(my_image):
     """
     Load the model and perform predictions on the input image.
@@ -59,7 +57,6 @@ def load_model_and_predict(my_image):
     # Load the model
     try:
         new_model = load_model(model_path)
-        st.success("Model loaded successfully!")
     except OSError:
         st.error(f"Model file not found at: {model_path}. Please upload the file to `outputs/v4`.")
         raise
@@ -84,7 +81,7 @@ def load_model_and_predict(my_image):
 
         # Display results
         leaf_condition = 'has powdery mildew' if pred_class == 'Powdery Mildew' else 'is healthy'
-        st.success(f"The leaf condition is: {leaf_condition}")
+        st.success(f"The leaf condition is {leaf_condition}")
 
         return pred_proba, pred_class
     except Exception as e:
