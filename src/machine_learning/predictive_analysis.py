@@ -42,7 +42,7 @@ def resize_input_image(img):
         img_array = np.array(img_resized) / 255.0  # Normalize to [0, 1]
         return np.expand_dims(img_array, axis=0)  # Add batch dimension
     except FileNotFoundError:
-        st.error("Image shape file not found. Please ensure `image_shape.pk1` exists in `outputs/v3`.")
+        st.error("Image shape file not found. Please ensure `image_shape.pk1` exists in `outputs/v4`.")
         raise
     except Exception as e:
         st.error(f"Error resizing image: {e}")
@@ -54,7 +54,7 @@ def load_model_and_predict(my_image):
     Load the model and perform predictions on the input image.
     """
     # Path to the model
-    model_path = 'outputs/trained_model.h5'
+    model_path = 'outputs/v4/trained_model.h5'
 
     # Load the model
     try:
