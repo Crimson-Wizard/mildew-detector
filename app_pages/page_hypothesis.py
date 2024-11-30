@@ -7,9 +7,10 @@ def page_hypothesis_body():
     st.write("### Hypothesis and Validation")
     st.markdown("""
                 Using a dataset, I hypothesis we can apply machine
-                 learning techniques to analyze images and accurately
-                 distinguish between healthy leaves and those affected
-                 by powdery mildew.
+                 learning techniques to analyze the various leaf traits
+                 such as discoloration and shape so images can accurately
+                 be distinguished between healthy leaves and those
+                 affected by powdery mildew.
                 """)
     st.success(
         f"Using machine learning, we compared differences between images"
